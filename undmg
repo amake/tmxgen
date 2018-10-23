@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+while (($# > 0)); do
+    tmp=$(mktemp -d)
+    name=$(basename "$1")
+    dest="${PWD}/${name%.dmg}"
+    hdiutil attach "$1" -private -readonly -nobrowse -mountpoint "$tmp"
+    (
+        cd "$tmp"
+        find . -depth -perm -+r -print0 | cpio -0 -p -d -m -u "$dest"
+        status=$?
+        cd /
+        hdiutil detach "$tmp"
+        rmdir "$tmp"
+        exit $status
+    ) || exit 1
+    shift
+done
