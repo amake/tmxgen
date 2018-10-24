@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+sdkVersion=$1
+
+repoUrlBase=https://dl.google.com/android/repository
+repoManifestUrl=$repoUrlBase/repository2-1.xml
+
+platformFile=$(curl -s $repoManifestUrl |
+    xmlstarlet sel -t -v ".//remotePackage[@path='platforms;android-${sdkVersion}']//url")
+
+echo $repoUrlBase/$platformFile
