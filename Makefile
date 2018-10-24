@@ -23,7 +23,7 @@ appleTmx: $(APPLE_TMX_DIST) | lg
 	@if [ -z "$^" ]; then $(MAKE) appleTmx; fi
 
 %.tmx: %.lg
-	xsltproc -o $@ --stringparam srclang en $(PWD)/lg2tmx.xsl $^
+	xsltproc -o $@ --stringparam srclang en res/lg2tmx.xsl $^
 
 work/apple/%: vendor/apple/%.dmg
 	mkdir -p $(@D)
