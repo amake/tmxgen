@@ -1,3 +1,5 @@
+export PATH := $(PWD)/bin:$(PATH)
+
 APPLE_PLATFORMS_VEND := $(wildcard vendor/apple/*)
 APPLE_DMG := $(wildcard vendor/apple/*/*)
 APPLE_WORK := $(APPLE_DMG:vendor/%.dmg=work/%)
@@ -5,7 +7,6 @@ APPLE_LG := $(wildcard $(APPLE_WORK:%=%/*.lg))
 APPLE_TMX_WORK := $(APPLE_LG:.lg=.tmx)
 APPLE_TMX_DIST := $(APPLE_TMX_WORK:work/%=dist/%)
 
-UNDMG := $(PWD)/undmg
 
 .PHONY: lg appleTmx clean
 
@@ -26,5 +27,5 @@ appleTmx: $(APPLE_TMX_DIST) | lg
 
 work/apple/%: vendor/apple/%.dmg
 	mkdir -p $(@D)
-	cd $(@D); $(UNDMG) $(PWD)/$^ >/dev/null
+	cd $(@D); undmg $(PWD)/$^ >/dev/null
 	touch $@
