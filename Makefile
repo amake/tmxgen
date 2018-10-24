@@ -18,6 +18,8 @@ ANDROID_TMX_DIST := dist/android/android-$(ANDROID_SDK_VERSION)-$(SRC_LANG)-$(TR
 
 .PHONY: lg appleTmx androidSdk androidTmx clean
 
+all: appleTmx androidTmx
+
 clean:
 	rm -rf work dist
 
