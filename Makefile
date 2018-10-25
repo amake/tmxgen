@@ -39,7 +39,7 @@ dist/%: work/%
 lg: $(APPLE_WORK)
 
 appleTmx: $(APPLE_TMX_DIST) | lg
-	@if [ -z "$^" ]; then $(MAKE) appleTmx; fi
+	@if [ -z "$^" ] && [ ! -z "$(APPLE_DMG)" ]; then $(MAKE) appleTmx; fi
 
 %.tmx: %.lg
 	xsltproc -o $@ --stringparam srclang en res/lg2tmx.xsl $^
