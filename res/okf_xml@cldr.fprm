@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<its:rules xmlns:its="http://www.w3.org/2005/11/its"
+           xmlns:itsx="http://www.w3.org/2008/12/its-extensions"
+           xmlns:okp="okapi-framework:xmlfilter-options"
+           xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0">
+    <its:translateRule selector="//languages/language[not(@alt)]" translate="yes" itsx:idValue="concat('language_', @type)" />
+    <its:translateRule selector="//script[not(@alt)]" translate="yes" itsx:idValue="concat('script_', @type)" />
+    <its:translateRule selector="//territory[not(@alt)]" translate="yes" itsx:idValue="concat('territory_', @type)" />
+    <its:translateRule selector="//variant[not(@alt)]" translate="yes" itsx:idValue="concat('variant_', @type)" />
+    <its:translateRule selector="//key[not(@alt)]" translate="yes" itsx:idValue="concat('key_', @type)" />
+    <its:translateRule selector="//type[not(@alt)]" translate="yes" itsx:idValue="concat('type_', @key, '_', @type)" />
+    <its:translateRule selector="//transformName[not(@alt)]" translate="yes" itsx:idValue="concat('type_', @type)" />
+    <its:translateRule selector="//measurementSystemName[not(@alt)]" translate="yes" itsx:idValue="concat('measurementSystemName_', @type)" />
+    <its:translateRule selector="//cyclicName[not(@alt)]" translate="yes" itsx:idValue="concat('cyclicName_', ../../../../../@type, '_', ../../../@type, '_', @type)" />
+    <its:translateRule selector="//monthWidth[@type='wide']/monthContext[@type='format']/month[not(@alt) and not(@yeartype)]" translate="yes" itsx:idValue="concat('month_', ../@type, '_', ../../../../@type, '_', @type)" />
+    <its:translateRule selector="//dayWidth[@type='wide']/day[not(@alt)]" translate="yes" itsx:idValue="concat('day_', ../../@type, '_', @type)" />
+    <its:translateRule selector="//quarterWidth[@type='wide']/quarter[not(@alt)]" translate="yes" itsx:idValue="concat('quarter_', ../../@type, '_', @type)" />
+    <its:translateRule selector="//dayPeriodContext[@type='format']/dayPeriodWidth[@type='wide']/dayPeriod[not(@alt)]" translate="yes" itsx:idValue="concat('dayPeriod_', ../../../../@type, '_', @type)" />
+    <its:translateRule selector="//eraNames/era[not(@alt)]" translate="yes" itsx:idValue="concat('era_', ../../../@type, '_', @type)" />
+    <its:translateRule selector="//relative[not(@alt)]" translate="yes" itsx:idValue="concat(../@type, '_relative_', @type)" />
+    <its:translateRule selector="//exemplarCity[not(@alt)]" translate="yes" itsx:idValue="concat('zone_', ../@type, '_exemplarCity')" />
+    <its:translateRule selector="//long/generic[not(@alt)]" translate="yes" itsx:idValue="concat('zone_', ../../@type, '_generic')" />
+    <its:translateRule selector="//long/daylight[not(@alt)]" translate="yes" itsx:idValue="concat('zone_', ../../@type, '_daylight')" />
+    <its:translateRule selector="//long/standard[not(@alt)]" translate="yes" itsx:idValue="concat('zone_', ../../@type, '_standard')" />
+    <its:translateRule selector="//long/special[not(@alt)]" translate="yes" itsx:idValue="concat('zone_', ../../@type, '_special')" />
+    <its:translateRule selector="//currency/displayName[not(@alt) and not(@count)]" translate="yes" itsx:idValue="concat('currency_', ../@type)" />
+    <its:translateRule selector="//unit/displayName[not(@alt) and not(@count)]" translate="yes" itsx:idValue="concat('unit_', ../../@type, '_', ../@type)" />
+    <its:translateRule selector="*" translate="no"/>
+</its:rules>

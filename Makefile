@@ -2,6 +2,7 @@ export PATH := $(PWD)/bin:$(PATH)
 
 SRC_LANG := en
 TRG_LANG := ja
+LANGUAGES := $(SRC_LANG) $(TRG_LANG)
 
 APPLE_PLATFORMS_VEND := $(wildcard vendor/apple/*)
 APPLE_DMG := $(wildcard vendor/apple/*/*)
@@ -17,9 +18,14 @@ ANDROID_SDK := work/android/android-$(ANDROID_SDK_VERSION)
 ANDROID_PIPELINE := work/android/pipeline.pln
 ANDROID_TMX_DIST := dist/android/android-$(ANDROID_SDK_VERSION)-$(SRC_LANG)-$(TRG_LANG).tmx
 
-.PHONY: lg appleTmx androidSdk androidTmx clean
+CLDR_BASE_URL := https://unicode.org/repos/cldr/trunk/common/main
+CLDR_PIPELINE := work/unicode/pipeline.pln
+CLDR_XML := $(LANGUAGES:%=vendor/unicode/%.xml)
+CLDR_TMX_DIST := dist/unicode/cldr-$(SRC_LANG)-$(TRG_LANG).tmx
 
-all: appleTmx androidTmx
+.PHONY: lg appleTmx androidSdk androidTmx cldrXml cldrTmx clean
+
+all: appleTmx androidTmx cldrTmx
 
 clean:
 	rm -rf work dist
@@ -79,3 +85,29 @@ $(ANDROID_TMX_DIST): $(ANDROID_SDK) $(ANDROID_PIPELINE)
 		-np \
 		$</data/res/$(call valuedir,$(SRC_LANG))/strings.xml -fc okf_xml-AndroidStrings \
 		$</data/res/$(call valuedir,$(TRG_LANG))/strings.xml -fc okf_xml-AndroidStrings
+
+### CLDR
+
+.INTERMEDIATE: $(CLDR_PIPELINE)
+$(CLDR_PIPELINE): res/IdAlign.pln
+	mkdir -p $(@D)
+	cp $^ $@
+	sed -e '/tmxOutputPath=.*/s|=.*$$|=$(CLDR_TMX_DIST)|' \
+		-i '' $@
+
+vendor/unicode/%:
+	mkdir -p $(@D)
+	curl -o $@ $(CLDR_BASE_URL)/$*
+
+cldrXml: $(CLDR_XML)
+
+cldrTmx: $(CLDR_TMX_DIST)
+
+$(CLDR_TMX_DIST): $(CLDR_XML) $(CLDR_PIPELINE)
+	rainbow -sl $(SRC_LANG) -tl $(TRG_LANG) \
+		-se utf-8 -te -utf-8 \
+		-pln $(lastword $^) \
+		-pd $(PWD)/res \
+		-np \
+		$(word 1,$^) -fc okf_xml@cldr \
+		$(word 2,$^) -fc okf_xml@cldr
