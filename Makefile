@@ -1,5 +1,8 @@
 export PATH := $(PWD)/bin:$(PATH)
 
+SRC_LANG := en
+TRG_LANG := ja
+
 APPLE_PLATFORMS_VEND := $(wildcard vendor/apple/*)
 APPLE_DMG := $(wildcard vendor/apple/*/*)
 APPLE_WORK := $(APPLE_DMG:vendor/%.dmg=work/%)
@@ -11,9 +14,7 @@ ANDROID_SDK_ZIP := vendor/android/android-%.zip
 ANDROID_SDK_WORK := $(ANDROID_SDK_ZIP:vendor/%=work/%)
 ANDROID_SDK_VERSION := 28
 ANDROID_SDK := work/android/android-$(ANDROID_SDK_VERSION)
-SRC_LANG := en
-TRG_LANG := ja
-PIPELINE := work/android/pipeline.pln
+ANDROID_PIPELINE := work/android/pipeline.pln
 ANDROID_TMX_DIST := dist/android/android-$(ANDROID_SDK_VERSION)-$(SRC_LANG)-$(TRG_LANG).tmx
 
 .PHONY: lg appleTmx androidSdk androidTmx clean
@@ -53,8 +54,8 @@ $(ANDROID_SDK_ZIP):
 	mkdir -p $(@D)
 	curl -o $@ $$(androidSdkUrl $*)
 
-.INTERMEDIATE: $(PIPELINE)
-$(PIPELINE): res/pipeline.pln
+.INTERMEDIATE: $(ANDROID_PIPELINE)
+$(ANDROID_PIPELINE): res/IdAlignUnquote.pln
 	cp $^ $@
 	sed -e '/outputPath=.*/s|=.*$$|=$(ANDROID_TMX_DIST)|' \
 		-i '' $@
@@ -70,7 +71,7 @@ androidLocale = $(if $(filter en,$1),, \
 
 valuedir = $(if $(call androidLocale,$1),values-$1,values)
 
-$(ANDROID_TMX_DIST): $(ANDROID_SDK) $(PIPELINE)
+$(ANDROID_TMX_DIST): $(ANDROID_SDK) $(ANDROID_PIPELINE)
 	rainbow -sl $(SRC_LANG) -tl $(TRG_LANG) \
 		-se utf-8 -te -utf-8 \
 		-pln $(lastword $^) \
