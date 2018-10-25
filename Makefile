@@ -56,6 +56,7 @@ $(ANDROID_SDK_ZIP):
 
 .INTERMEDIATE: $(ANDROID_PIPELINE)
 $(ANDROID_PIPELINE): res/IdAlignUnquote.pln
+	mkdir -p $(@D)
 	cp $^ $@
 	sed -e '/outputPath=.*/s|=.*$$|=$(ANDROID_TMX_DIST)|' \
 		-i '' $@
