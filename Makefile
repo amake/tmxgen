@@ -23,10 +23,10 @@ CLDR_PIPELINE := work/unicode/pipeline.pln
 CLDR_XML := $(LANGUAGES:%=vendor/unicode/%.xml)
 CLDR_TMX_DIST := dist/unicode/cldr-$(SRC_LANG)-$(TRG_LANG).tmx
 
-.PHONY: lg appleTmx androidSdk androidTmx cldrXml cldrTmx clean
-
+.PHONY: all
 all: appleTmx androidTmx cldrTmx
 
+.PHONY: clean
 clean:
 	rm -rf work dist
 
@@ -36,8 +36,10 @@ dist/%: work/%
 
 ### Apple
 
+.PHONY: lg
 lg: $(APPLE_WORK)
 
+.PHONY: appleTmx
 appleTmx: $(APPLE_TMX_DIST) | lg
 	@if [ -z "$^" ] && [ ! -z "$(APPLE_DMG)" ]; then $(MAKE) appleTmx; fi
 
@@ -67,8 +69,10 @@ $(ANDROID_PIPELINE): res/IdAlignUnquote.pln
 	sed -e '/outputPath=.*/s|=.*$$|=$(ANDROID_TMX_DIST)|' \
 		-i '' $@
 
+.PHONY: androidSdk
 androidSdk: $(ANDROID_SDK)
 
+.PHONY: androidTmx
 androidTmx: $(ANDROID_TMX_DIST)
 
 # This handling of sr-Latn is a hack, but it's the only BCP 47 tag in the SDK as
@@ -99,8 +103,10 @@ vendor/unicode/%:
 	mkdir -p $(@D)
 	curl -o $@ $(CLDR_BASE_URL)/$*
 
+.PHONY: cldrXml
 cldrXml: $(CLDR_XML)
 
+.PHONY: cldrTmx
 cldrTmx: $(CLDR_TMX_DIST)
 
 $(CLDR_TMX_DIST): $(CLDR_XML) $(CLDR_PIPELINE)
