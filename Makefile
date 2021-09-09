@@ -13,7 +13,7 @@ APPLE_TMX_DIST := $(APPLE_TMX_WORK:work/%=dist/%)
 
 ANDROID_SDK_ZIP := vendor/android/android-%.zip
 ANDROID_SDK_WORK := $(ANDROID_SDK_ZIP:vendor/%.zip=work/%)
-ANDROID_SDK_VERSION := 28
+ANDROID_SDK_VERSION := 30
 ANDROID_SDK := work/android/android-$(ANDROID_SDK_VERSION)
 ANDROID_PIPELINE := work/android/pipeline.pln
 ANDROID_TMX_DIST := dist/android/android-$(ANDROID_SDK_VERSION)-$(SRC_LANG)-$(TRG_LANG).tmx
