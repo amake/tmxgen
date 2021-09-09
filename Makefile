@@ -24,9 +24,11 @@ CLDR_XML := $(LANGUAGES:%=vendor/unicode/%.xml)
 CLDR_TMX_DIST := dist/unicode/cldr-$(SRC_LANG)-$(TRG_LANG).tmx
 
 .PHONY: all
+all: ## Generate Apple, Android, and CLDR TMX files
 all: appleTmx androidTmx cldrTmx
 
 .PHONY: clean
+clean: ## Remove working files
 clean:
 	rm -rf work dist
 
@@ -40,6 +42,7 @@ dist/%: work/%
 lg: $(APPLE_WORK)
 
 .PHONY: appleTmx
+appleTmx: ## Generate Apple TMX files
 appleTmx: $(APPLE_TMX_DIST) | lg
 	@if [ -z "$^" ] && [ ! -z "$(APPLE_DMG)" ]; then $(MAKE) appleTmx; fi
 
@@ -73,6 +76,7 @@ $(ANDROID_PIPELINE): res/IdAlignUnquote.pln
 androidSdk: $(ANDROID_SDK)
 
 .PHONY: androidTmx
+androidTmx: ## Generate Android TMX files
 androidTmx: $(ANDROID_TMX_DIST)
 
 # This handling of sr-Latn is a hack, but it's the only BCP 47 tag in the SDK as
@@ -107,6 +111,7 @@ vendor/unicode/%:
 cldrXml: $(CLDR_XML)
 
 .PHONY: cldrTmx
+cldrTmx: ## Generate CLDR TMX files
 cldrTmx: $(CLDR_TMX_DIST)
 
 $(CLDR_TMX_DIST): $(CLDR_XML) $(CLDR_PIPELINE)
@@ -117,3 +122,11 @@ $(CLDR_TMX_DIST): $(CLDR_XML) $(CLDR_PIPELINE)
 		-np \
 		$(word 1,$^) -fc okf_xml@cldr \
 		$(word 2,$^) -fc okf_xml@cldr
+
+.PHONY: help
+help: ## Show this help text
+	$(info usage: make [target])
+	$(info )
+	$(info Available targets:)
+	@awk -F ':.*?## *' '/^[^\t].+?:.*?##/ \
+         {printf "  %-24s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
