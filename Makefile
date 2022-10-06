@@ -18,7 +18,7 @@ ANDROID_SDK := work/android/android-$(ANDROID_SDK_VERSION)
 ANDROID_PIPELINE := work/android/pipeline.pln
 ANDROID_TMX_DIST := dist/android/android-$(ANDROID_SDK_VERSION)-$(SRC_LANG)-$(TRG_LANG).tmx
 
-CLDR_BASE_URL := https://unicode.org/repos/cldr/trunk/common/main
+CLDR_BASE_URL := https://raw.githubusercontent.com/unicode-org/cldr/main/common/main
 CLDR_PIPELINE := work/unicode/pipeline.pln
 CLDR_XML := $(LANGUAGES:%=vendor/unicode/%.xml)
 CLDR_TMX_DIST := dist/unicode/cldr-$(SRC_LANG)-$(TRG_LANG).tmx
